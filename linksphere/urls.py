@@ -16,12 +16,24 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
 from socialapp import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('',views.SigninView.as_view(),name="signin"),
     path('register',views.SignupView.as_view(),name="register"),
-    path('signin',views.SigninView.as_view(),name="signin"),
-    path('index',views.IndexView.as_view(),name="index"),
     path('signout',views.SignOutView.as_view(),name="signout"),
-]
+    path('index',views.IndexView.as_view(),name="index"),
+    path('profile/all',views.ProfileListView.as_view(),name="profile_list"),
+    path('profile/<int:pk>',views.ProfileDetailView.as_view(),name="profile_details"),
+    path('profile/<int:pk>/change',views.ProfileUpdateView.as_view(),name="profile-update"),
+    path('profile/<int:pk>/follow',views.FollowView.as_view(),name="follow"),
+    path('profile/<int:pk>/block',views.ProfileBlockView.as_view(),name="block"),
+    path('post/<int:pk>/like',views.PostLikeView.as_view(),name="like"),
+    path('post/<int:pk>/comments/add',views.CommentView.as_view(),name="comment_add"),
+    path('stories/add',views.StorieCreateView.as_view(),name="story_create"),
+
+    
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

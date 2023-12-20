@@ -52,10 +52,16 @@ class Stories(models.Model):
     def __str__(self):
         return self.title
     
+    def save(self,*args,**kwargs):
+        if not self.expiry_date:
+            self.expiry_date=timezone.now()+timezone.timedelta(days=1)
+        super().save(*args,**kwargs)
+    
     
     
 def create_profile(sender,created,instance,**kwargs):
      if created:
         UserProfile.objects.create(user=instance)
+        print("profile obj creadted")
         
 post_save.connect(create_profile,sender=User)
